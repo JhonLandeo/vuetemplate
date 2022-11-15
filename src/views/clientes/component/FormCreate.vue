@@ -5,7 +5,7 @@
     >
     <b-modal id="modal-1" title="Formulario" hide-footer>
       <b-col sm="12">
-        <b-form-group id="input-group-1" :label="operacion">
+        <b-form-group id="input-group-1" >
           <b-form-input
             id="name"
             type="text"
@@ -79,7 +79,7 @@
           </b-col>
           <b-list-group
             class="mt-3"
-            v-for="(numero, index) in JSON.parse(formedit.transacciones)"
+            v-for="(numero, index) in pag"
             :key="numero.id"
           >
             <b-row>
@@ -163,11 +163,11 @@ export default {
         monto: "",
         fecha: "",
       },
+      pag:[]
     };
   },
   methods: {
     editId: function (id, index) {
-      
       this.formedit[index].transacciones.id = parseInt(id);
     },
     editMonto: function (monto, index) {
@@ -177,10 +177,7 @@ export default {
       this.pagos[index].fecha = parseInt(fecha);
     },
     agregar() {
-      let limite = this.pagos.length;
-      if (limite < 5) {
-        this.pagos.push(this.pago);
-      }
+      this.pag.push(this.pago)
       this.pago = {
         id: null,
         monto: "",
@@ -198,15 +195,11 @@ export default {
       }
     },
     quitar() {
-      this.pagos.pop(this.formedit.transacciones);
+      this.pag.pop(this.pago);
       this.client.total = [];
     },
-
-    
-
     frmCrear: function () {
       this.operacion = "crear";
-      this.actualizarTabla(true);
       if (this.operacion == "crear") {
         this.formedit.id = null;
         this.formedit.name = "";
@@ -215,10 +208,9 @@ export default {
         this.formedit.telefono = "";
         this.formedit.transacciones = [];
         this.transacciones = [];
-        this.pagos = [];
-
-        console.log(this.operacion);
+        this.pag = [];
       }
+      this.actualizarTabla(true);
     },
     async editar() {
       let parametros = {
@@ -237,7 +229,7 @@ export default {
       let parametros = {
         name: this.formedit.name,
         year: this.formedit.year,
-        transacciones: JSON.stringify(this.pagos),
+        transacciones: JSON.stringify(this.pag),
         fecha_nac: this.formedit.fecha_nac,
         telefono: this.formedit.telefono,
       };
@@ -255,8 +247,10 @@ export default {
       edi: (state) => state.storeClient.estado,
     }),
     ...mapState({
-      formedit: (state) => state.storeClient.clients,
-      
+      formedit: (state) => state.storeClient.clients, 
+    }),
+    ...mapState({
+      pag: (state) => state.storeClient.clients.transacciones, 
     }),
     
   },

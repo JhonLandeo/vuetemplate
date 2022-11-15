@@ -95,7 +95,6 @@ export default {
       return to.length;
     },
     frmEditar: function (data, pagos) {
-      
       this.actualizarTabla(true);
       this.operacion = "editar";
       this.pagos = JSON.parse(pagos);
