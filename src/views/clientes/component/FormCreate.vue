@@ -168,7 +168,7 @@ export default {
   methods: {
     editId: function (id, index) {
       
-      this.pagos[index].id = parseInt(id);
+      this.formedit[index].transacciones.id = parseInt(id);
     },
     editMonto: function (monto, index) {
       this.pagos[index].monto = parseInt(monto);
@@ -261,7 +261,7 @@ export default {
     
   },
   created() {
-    console.log(JSON.parse(formedit.transacciones));
+    console.log(this.formedit);
   },
 };
 </script>
