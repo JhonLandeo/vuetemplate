@@ -10,7 +10,7 @@
       <template #cell(boton)="data">
         <b-button
           v-b-modal.modal-1
-          v-on:click="frmEditar(data.item, data.item.transacciones)"
+          v-on:click="frmEditar(data.item)"
           class="btn btn-success"
           type="submit"
           v-if="data"
@@ -69,7 +69,6 @@ export default {
   methods: {
     async list() {
       this.clients = await ClientService.getClient();
-      /* this.$emit('act',this.clients) */
       this.actualizarTabla(false);
       return this.clients;
     },
@@ -94,11 +93,10 @@ export default {
       });
       return to.length;
     },
-    frmEditar: function (data, pagos) {
+    frmEditar: function (data) {
       this.actualizarTabla(true);
       this.operacion = "editar";
-      this.pagos = JSON.parse(pagos);
-      this.editarClient(data,pagos);
+      this.editarClient(data);
     },
     ...mapMutations({
       editarClient: "editar",
@@ -108,6 +106,9 @@ export default {
     ...mapState({
       actualizar: (state) => state.storeClient.estado,
     }),
+    ...mapState({
+      
+    })
   },
   watch: {
     actualizar(newValue) {
