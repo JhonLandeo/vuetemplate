@@ -27,10 +27,27 @@
         </b-button>
       </template>
     </b-table>
+    <b-pagination
+              v-model="currentPage"
+              :total-rows="totalData"
+              :per-page="perPage"
+              first-number
+              last-number
+              class="mb-0 mt-1 mt-sm-0"
+              prev-class="prev-item"
+              next-class="next-item"
+            >
+              <template #prev-text>
+                <feather-icon icon="ChevronLeftIcon" size="18" />
+              </template>
+              <template #next-text>
+                <feather-icon icon="ChevronRightIcon" size="18" />
+              </template>
+            </b-pagination>
   </b-col>
 </template>
 <script>
-import { BTable, BCol, BIconTrash, BIconPencil, BButton } from "bootstrap-vue";
+import { BTable, BCol, BIconTrash, BIconPencil, BButton, BPagination } from "bootstrap-vue";
 import ClientService from "../service/client.service";
 import { mapState } from "vuex";
 import { mapMutations } from "vuex";
@@ -41,19 +58,43 @@ export default {
     BIconTrash,
     BIconPencil,
     BButton,
+    BPagination
   },
   data() {
     return {
+      totalData: "",
+      perPage: 2,
       operacion: "",
+      currentPage: 2,
       field: [
-        "id",
-        "name",
-        "year",
-        "transacciones",
-        "cantidad",
-        "telefono",
-        "fecha_nac",
-        "boton",
+        {
+          key:'id',
+          label:'ID'
+        },
+        {
+          key:'name',
+          label:'NOMBRE'
+        },
+        {
+          key:'year',
+          label:'EDAD'
+        },
+        {
+          key:'transacciones',
+          label:'TOTAL PAGOS'
+        },
+        {
+          key:'telefono',
+          label:'TELEFONO'
+        },
+        {
+          key:'fecha_nac',
+          label:'FECHA DE NACIMIENTO'
+        },
+        {
+          key:'boton',
+          label:'ACCIONES'
+        },  
       ],
       client: {
         id: null,
@@ -107,7 +148,7 @@ export default {
       actualizar: (state) => state.storeClient.estado,
     }),
     ...mapState({
-      
+
     })
   },
   watch: {
