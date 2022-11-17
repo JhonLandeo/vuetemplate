@@ -1,6 +1,15 @@
 <template lang="">
   <b-col sm="10">
-    <b-table :fields="field" :items="list" striped hover ref="ClientTable">
+    <b-table
+      :fields="field"
+      :items="list"
+      striped
+      hover
+      ref="ClientTable"
+      :current-page="currentPage"
+      :per-page="perPage"
+      
+    >
       <template #cell(transacciones)="data">
         <div v-if="data">{{ sumT(data.item.transacciones) }}</div>
       </template>
@@ -28,26 +37,35 @@
       </template>
     </b-table>
     <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
+      v-model="currentPage"
+      :total-rows="totalData"
+      :per-page="perPage"
+      first-number
+      last-number
+      class="mb-0 mt-1 mt-sm-0"
+      prev-class="prev-item"
+      next-class="next-item"
+    >
+      <template #prev-text>
+        <feather-icon icon="ChevronLeftIcon" size="18" />
+      </template>
+      <template #next-text>
+        <feather-icon icon="ChevronRightIcon" size="18" />
+      </template>
+    </b-pagination>
+    <slot></slot>
   </b-col>
+ 
 </template>
 <script>
-import { BTable, BCol, BIconTrash, BIconPencil, BButton, BPagination } from "bootstrap-vue";
+import {
+  BTable,
+  BCol,
+  BIconTrash,
+  BIconPencil,
+  BButton,
+  BPagination,
+} from "bootstrap-vue";
 import ClientService from "../service/client.service";
 import { mapState } from "vuex";
 import { mapMutations } from "vuex";
@@ -58,43 +76,44 @@ export default {
     BIconTrash,
     BIconPencil,
     BButton,
-    BPagination
+    BPagination,
   },
   data() {
     return {
+      totalRows: 1,
       totalData: "",
       perPage: 2,
       operacion: "",
       currentPage: 2,
       field: [
         {
-          key:'id',
-          label:'ID'
+          key: "id",
+          label: "ID",
         },
         {
-          key:'name',
-          label:'NOMBRE'
+          key: "name",
+          label: "NOMBRE",
         },
         {
-          key:'year',
-          label:'EDAD'
+          key: "year",
+          label: "EDAD",
         },
         {
-          key:'transacciones',
-          label:'TOTAL PAGOS'
+          key: "transacciones",
+          label: "TOTAL PAGOS",
         },
         {
-          key:'telefono',
-          label:'TELEFONO'
+          key: "telefono",
+          label: "TELEFONO",
         },
         {
-          key:'fecha_nac',
-          label:'FECHA DE NACIMIENTO'
+          key: "fecha_nac",
+          label: "FECHA DE NACIMIENTO",
         },
         {
-          key:'boton',
-          label:'ACCIONES'
-        },  
+          key: "boton",
+          label: "ACCIONES",
+        },
       ],
       client: {
         id: null,
@@ -147,9 +166,7 @@ export default {
     ...mapState({
       actualizar: (state) => state.storeClient.estado,
     }),
-    ...mapState({
-
-    })
+    ...mapState({}),
   },
   watch: {
     actualizar(newValue) {
@@ -157,7 +174,16 @@ export default {
         this.$refs.ClientTable.refresh();
       }
     },
+    client:{
+      handler: (nuevoValor, valorAnterior) => {
+			  console.log("La mascota era ", valorAnterior, " y ahora es", nuevoValor);
+		}
+    }
+    
   },
+  created() {
+    console.log(this.$attrs)
+  }
 };
 </script>
 <style lang=""></style>

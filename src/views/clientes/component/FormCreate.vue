@@ -202,8 +202,7 @@
           </b-col>
           <b-list-group
             class="mt-3"
-            v-for="(numero, index) in pag"
-            v-if="pag"
+            v-for="(numero, index) in valid"
             :key="numero.id"
           >
             <b-row>
@@ -274,6 +273,7 @@ export default {
   },
   data() {
     return {
+      question: "",
       clients: [],
       client: {
         id: null,
@@ -343,6 +343,7 @@ export default {
         this.client.transacciones = [];
         this.transacciones = [];
         this.pagos = [];
+        this.pag = [];
       }
       this.actualizarTabla(true);
     },
@@ -372,7 +373,11 @@ export default {
       this.actualizarTabla(true);
       this.$bvModal.hide("modal-crear");
       this.operacion = "";
+      this.pagos=[];
+      this.client.transacciones = [];
+        this.transacciones = [];
     },
+    
     ...mapMutations({
       actualizarTabla: "cambiar",
     }),
@@ -384,19 +389,32 @@ export default {
     ...mapState({
       edi: (state) => state.storeClient.estado,
     }),
+    
+    ...mapState({
+      pag: (state) => state.storeClient.clients.transacciones,
+    }),
+    valid(){
+      if (this.pag==undefined) {
+        return false
+      } else{
+        return JSON.parse(this.pag)
+      }
+    },
     ...mapState({
       formedit: (state) => state.storeClient.clients,
     }),
-    ...mapState({
-      pag: (state) => JSON.parse(state.storeClient.clients.transacciones),
-    }),
   },
-  created() {
-    this.pag;
+  watch: {
+    client: {
+      deep: true,
+      handler: (nuevoValor, valorAnterior) => {
+        console.log("El objeto era ", valorAnterior, " y ahora es", nuevoValor);
+      },
+    },
   },
-  activated() {
-    this.pag;
-  },
+ updated() {
+  
+ },
 };
 </script>
 <style lang=""></style>

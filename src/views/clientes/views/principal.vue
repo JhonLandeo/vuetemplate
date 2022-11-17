@@ -1,8 +1,8 @@
 <template lang="">
-  <b-container class="container-fluid">
+  <b-container fluid>
     <b-row class="row">
-      <Table/>
-      <FormCreate @frmEditar="clients=$event" />
+      <Table><div>Hola</div></Table>
+      <FormCreate />
     </b-row>
   </b-container>
 </template>
@@ -14,11 +14,7 @@ import { BRow, BContainer } from "bootstrap-vue";
 export default {
   props:['dato'],
   components: { Table, FormCreate, BRow, BContainer },
-  data() {
-    return {
-      clients:[]
-    }
-  },
+  
  
 };
 </script>

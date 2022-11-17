@@ -1,4 +1,5 @@
 import indexNav from '../../views/clientes/navigation/indexNav'
+import navUser from '../../views/users/navigation/index'
 export default [
   {
     title: 'Home',
@@ -10,5 +11,6 @@ export default [
     route: 'second-page',
     icon: 'FileIcon',
   },
-  indexNav
+  indexNav,
+  navUser
 ]
