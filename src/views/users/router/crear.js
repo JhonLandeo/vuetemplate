@@ -1,8 +1,8 @@
 export default
 {
-    path: '/usuario',
+    path: '/crear-usuario',
     name: 'crear-usuario',
-    component: () => import('@/views/users/views/principal.vue'),
+    component: () => import('@/views/users/component/Form.vue'),
     meta: {
       pageTitle: 'Crear usuario',
       breadcrumb: [

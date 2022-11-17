@@ -1,33 +1,54 @@
 <template lang="">
   <b-col sm="12">
-    <b-table :items="usuarios" :fields="field" responsive>
-      <template slot="usuarios" slot-scope="usuarios"> 
+    <button type="submit">Crear</button>
+    <b-table :items="usuarios" :fields="field" responsive id="myTable" :per-page="perPage" :current-page="currentPage">
+      <template #cell(status)="data">
+        <div v-if="estado(data.item.status) == 'Active'">
+          <b-badge href="#" variant="success">{{
+            estado(data.item.status)
+          }}</b-badge>
+        </div>
+        <div v-else>
+          <b-badge href="#" variant="secondary">{{
+            estado(data.item.status)
+          }}</b-badge>
+        </div>
       </template>
-      <template #cell(status) >
-        <b-col v-if="usuarios[0].status == 1">
-
-          <b-badge href="#" variant="success">ACTIVE</b-badge>
-        </b-col>
-      </template>
-      <template #cell(status_session) >
-        <b-col v-if="usuarios[0].status_session == 1">
-          <b-icon-circleFill style="color:green"></b-icon-circleFill><p>Active</p>
-        </b-col>
+      <template #cell(status_session)="data">
+        <div v-if="estadoSesion(data.item.status_session) == 'Active'">
+          <b-icon-circleFill style="color: green"></b-icon-circleFill>
+          <p>{{ estadoSesion(data.item.status_session) }}</p>
+        </div>
+        <div v-else>
+          <b-icon-circleFill style="color: gray"></b-icon-circleFill>
+          <p>{{ estadoSesion(data.item.status_session) }}</p>
+        </div>
       </template>
     </b-table>
-    
+    <b-pagination
+      v-model="currentPage"
+      :per-page="perPage"
+      aria-controls="my-table"
+      :total-rows="rows"
+    ></b-pagination>
   </b-col>
 </template>
 <script>
 import UserService from "../service/index";
-import { BTable, BCol, BBadge, BIconCircleFill } from "bootstrap-vue";
-
+import {
+  BTable,
+  BCol,
+  BBadge,
+  BIconCircleFill,
+  BPagination,
+} from "bootstrap-vue";
 export default {
   components: {
     BTable,
     BCol,
     BBadge,
-    BIconCircleFill
+    BIconCircleFill,
+    BPagination,
   },
   data() {
     return {
@@ -51,7 +72,7 @@ export default {
         },
         {
           key: "Modulo",
-          label: "Module",
+          label: "Modulo",
         },
         {
           key: "module_id",
@@ -70,6 +91,8 @@ export default {
           label: "CREATED BY",
         },
       ],
+      perPage: 8,
+      currentPage:2
     };
   },
   methods: {
@@ -77,14 +100,22 @@ export default {
       this.usuarios = await UserService.getUserData();
       return this.usuarios;
     },
-  },
-  computed: {
-    estado() {
-    
+    estado(dato) {
+      return dato == 1 ? "Active" : "Desactive";
+    },
+    estadoSesion(dato) {
+      return dato == 1 ? "Active" : "Offline";
     },
   },
+  computed: {
+    
+      rows() {
+        return this.usuarios.length
+      }
+  
+  },
   created() {
-    console.log(this.viewTable());
+    this.viewTable();
   },
 };
 </script>
